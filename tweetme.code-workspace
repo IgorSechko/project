@@ -4,5 +4,7 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"python.pythonPath": "C:\\Users\\Acer\\.virtualenvs\\Tweetme-zHG-OT63\\Scripts\\python.exe"
+	}
 }
