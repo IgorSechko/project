@@ -108,6 +108,10 @@ function loadTweets(tweetsElement){
 
     xhr.responseType = responseType
     xhr.open(method, url)
+    // make it ajax
+    xhr.setRequestHeader("HTTP_X_REQUESTED_WITH", "XMLHttpRequest")
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest")
+    
     xhr.onload = function() {
         const serverResponse = xhr.response
         const listedItems = serverResponse.response
