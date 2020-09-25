@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.1.1">
+    <title>Relation finder</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+
+    <style>
+        .container {
+          max-width: 560px!important;
+        }
+
+        .lh-condensed { line-height: 1.25!important; }
+
+        .mymarg {
+          margin-bottom: 300cm;
+        }
+
+
+
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 540px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+  </head>
+  <body class="bg-light">
+<div class="container">
+
+
+  <!--<div class="py-5 text-center">
+    <h2>Checkout form</h2>
+    <p class="lead">Below is an example form built entirely with Bootstrap’s form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p>
+  </div>-->
+
+
+
+
+  <div class="row shadow-lg p-2 pl-4 pr-4 mt-5 border rounded-lg">
+      
+      <form class="needs-validation" action="" method="POST" novalidate>
+        <div class="row mt-3">
+          <div class="col-md-3 mb-3">
+            <label for="surName">Фамилия</label>
+          </div>
+          <div class="col-md-9 mb-3">
+            <input type="text" class="form-control form-control-sm" id="surName" placeholder="" value="" required>
+          </div>
+          <div class="col-md-3 mb-3">
+            <label for="firstName">Имя</label>
+          </div>
+          <div class="col-md-9 mb-3">
+            <input type="text" class="form-control form-control-sm" id="firstName" placeholder="" value="" required>
+          </div>
+          <div class="col-md-3 mb-2">
+            <label for="fatherName">Отчество</label>
+          </div>
+          <div class="col-md-9 mb-2">
+            <input type="text" class="form-control form-control-sm" id="fatherName" placeholder="" value="" required>
+          </div>
+        </div>
+
+        <hr class="mt-2 mb-3">
+
+        <div class="row">
+          <div class="col-md-4 mb-2">
+            <label for="lifeTime">Годы жизни</label>
+          </div>
+          <div class="col-md-4 mb-2">
+            <input type="text" class="form-control form-control-sm" id="lifeTime-start" placeholder="год рождения" required>
+          </div>
+          <div class="col-md-4 mb-2">
+            <input type="text" class="form-control form-control-sm" id="lifeTime-end" placeholder="год смерти" required>
+          </div>
+        </div>
+
+        <hr class="mt-2 mb-3">
+        
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label for="lifePlace1">Место жительства 1</label>
+          </div>
+          <div class="col-md-8 mb-3">
+            <button class="btn btn-primary btn-sm btn-block" type="submit">Указать на карте</button>
+          </div>
+
+          <div class="col-md-4 mb-2">
+            <label for="placePeriod1">Годы жизни</label>
+          </div>
+          <div class="col-md-4 mb-2">
+            <input type="text" class="form-control form-control-sm" id="placePeriod1-start" placeholder="С" required>
+          </div>
+          <div class="col-md-4 mb-2">
+            <input type="text" class="form-control form-control-sm" id="placePeriod1-end" placeholder="по" required>
+          </div>
+        </div>
+        
+        <hr class="mt-2 mb-3">
+
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label for="lifePlace2">Место жительства 2</label>
+          </div>
+          <div class="col-md-8 mb-3">
+            <button class="btn btn-primary btn-sm btn-block" type="submit">Указать на карте</button>
+          </div>
+          
+          <div class="col-md-4 mb-2">
+            <label for="placePeriod2">Годы жизни</label>
+          </div>
+          <div class="col-md-4 mb-2">
+            <input type="text" class="form-control form-control-sm" id="placePeriod2-start" placeholder="С" required>
+          </div>
+          <div class="col-md-4 mb-2">
+            <input type="text" class="form-control form-control-sm" id="placePeriod2-end" placeholder="по" required>
+          </div>
+        </div>
+
+        <hr class="mt-2 mb-3">
+        
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label for="lifePlace3">Место жительства 3</label>
+          </div>
+          <div class="col-md-8 mb-3">
+            <button class="btn btn-primary btn-sm btn-block" type="submit">Указать на карте</button>
+          </div>
+          
+          <div class="col-md-4 mb-2">
+            <label for="placePeriod3">Годы жизни</label>
+          </div>
+          <div class="col-md-4 mb-2">
+            <input type="text" class="form-control form-control-sm" id="placePeriod3-start" placeholder="С" required>
+          </div>
+          <div class="col-md-4 mb-2">
+            <input type="text" class="form-control form-control-sm" id="placePeriod3-end" placeholder="по" required>
+          </div>
+        </div>
+
+        <hr class="mt-2 mb-3">
+
+        <div class="row mt-5 mb-2">
+          <div class="col-md-2"></div>
+          <div class="col-md-8">
+            <button class="btn btn-primary btn-block" type="submit">Отправить</button>
+          </div>
+          <div class="col-md-2"></div>
+        </div>
+               
+      </form>
+  </div>
+</div>
+
+<div class="mymarg"></div>
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4845115.07691713!2d23.492673782141296!3d53.63308354371096!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46da2584e2ad4881%3A0xa1d181ec8c10!2z0JHQtdC70LDRgNGD0YHRjA!5e0!3m2!1sru!2sby!4v1600855374309!5m2!1sru!2sby" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
+<script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+<script src="form-validation.js"></script>
+</body>
+</html>
