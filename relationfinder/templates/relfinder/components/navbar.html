@@ -1,0 +1,32 @@
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">Expand at sm</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarsExample03">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Главная<span class="sr-only">(current)</span></a>
+      </li>
+      {% if request.user.is_authenticated %}
+      <li class="nav-item active">
+        <a class="nav-link" href="/profile/">Моя страница<span class="sr-only">(current)</span></a>
+      </li>
+      {% endif %}
+
+    </ul>
+    {% if request.user.is_authenticated %}
+    <form action="/logout/" method="get">
+      <button type="submit" class="myrad mx-2 btn btn-light">Выход</button>
+    </form>   
+    {% else %}
+    <form action="/login/" method="get">
+      <button type="submit" class="myrad mx-2 btn btn-light">Вход</button>
+    </form>   
+    <form action="/register/" method="get">
+      <button type="submit" class="myrad mx-2 btn btn-light">Регистрация</button>
+    </form>    
+    {% endif %}
+  </div>
+</nav>

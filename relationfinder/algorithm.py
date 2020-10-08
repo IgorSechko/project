@@ -1,22 +1,19 @@
 from .models import FormData
+import threading
 
 
 FIELDS = FormData._meta.get_fields()
 
 
-def evaluate(source):                          
+def evaluate(src):                          
+    thread = threading.Thread(target=run, args=(src,))
+    thread.daemon = True
+    thread.start()
+    
+def run(source):                          
     targets = FormData.objects.exclude(id=source.id) # QuerySet Class
     for target in targets:
         print(comapare(source, target))
-    
-
-
-        
-    # print("DEBUG: TARGETS' IDS ARE")
-    # print(list(targets.values("id")))
-    # print("DEBUG: SOURCE'S ID IS")
-    # print(source.id)
-
 
 def comapare(source, target):
     overlap = [False,False,False]

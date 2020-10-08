@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 #from .serializers import TweetSerializer
 from .algorithm import evaluate
-from .forms import FormDataForm
+from .forms import FormDataForm, RegisterForm
 from .models import FormData
 from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render, redirect
@@ -19,12 +19,7 @@ def home_view22(request, *args, **kwargs):
     return render(request, "pages/home.html", context={}, status=200)
 
 
-def create_form(request, *args, **kwargs):
-    form = FormDataForm(request.POST or None)
-    if form.is_valid():     # check if fields were filled correctly
-        obj = form.save()   # returns object instance
-        evaluate(obj)
-    return redirect("/relf")
+
 
 # def create_form_hhh(request, *args, **kwargs):
 #     user = request.user
@@ -49,7 +44,45 @@ def create_form(request, *args, **kwargs):
 #             return JsonResponse(form.errors, status = 400)
 #     return render(request, "components/form.html", context = {"form": form})
 
+# def index(request):
+#     return render(request, "relationfinder/index.html")
 
 
-def index(request):
-    return render(request, "relationfinder/index.html")
+def home(request):
+    return render(request, "relfinder/home.html")
+
+def register(request):
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            print("form is valid")
+            form.save()
+        else:
+            print("form is INvalid")
+    else:
+        form = RegisterForm()
+    return render(request, "register/register.html", {"form": form})
+
+def profile(request):
+    if request.user.is_authenticated:
+        return render(request, "relfinder/profile.html")
+    else:
+        return render(request, "relfinder/home.html")
+
+def create(request):
+    if request.user.is_authenticated:
+        return render(request, "relfinder/formtofill.html")
+    else:
+        return render(request, "relfinder/home.html")
+
+def save_form_data(request, *args, **kwargs):
+    if request.user.is_authenticated:
+        form = FormDataForm(request.POST or None)
+        if form.is_valid():     # check if fields were filled correctly
+            obj = form.save()   # returns object instance
+            evaluate(obj)
+        return render(request, "relationfinder/index.html")    
+    else:
+        return render(request, "relfinder/home.html")
+    
+    #return redirect("/relf")

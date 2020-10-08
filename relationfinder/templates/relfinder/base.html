@@ -11,8 +11,8 @@
 
     <title>{% block head_title %}{% endblock head_title %}</title>
     <style>
-      .bg-light {
-      background-color: #6db335!important;
+      .bg-dark {
+      background-color: #ffe056!important;
       }
       #welc {
         font-family: 'Grandstander', cursive;
@@ -20,14 +20,19 @@
       .myf {
         font-family: 'Josefin Sans', sans-serif;
       }
+      .myrad {
+        border-radius: 3px!important;
+      }
+      body{
+        background-color: #ffe05667; 
+      } 
     </style>
   </head>
   <body>
-    {% include "components/navbar.html" %}
-    <div class="container">
-      {% block content %}
-      {% endblock content %}
-    </div>
+    {% include "relfinder/components/navbar.html" %}
+    {% block content %}
+    {% endblock content %}
+  
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
