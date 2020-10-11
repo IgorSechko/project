@@ -41,6 +41,7 @@ class FormDataForm(forms.ModelForm):
             'place3_start_year',
             'place3_end_year',
             ]
+        exclude = ['user']
 
 
 

@@ -79,9 +79,13 @@ def save_form_data(request, *args, **kwargs):
     if request.user.is_authenticated:
         form = FormDataForm(request.POST or None)
         if form.is_valid():     # check if fields were filled correctly
-            obj = form.save()   # returns object instance
+            obj = form.save(commit=False)   # returns object instance
+            obj.user = request.user
+            obj.save()
             evaluate(obj)
-        return render(request, "relationfinder/index.html")    
+        else:
+            print("form is invalid")
+        return redirect("/profile/")   
     else:
         return render(request, "relfinder/home.html")
     
