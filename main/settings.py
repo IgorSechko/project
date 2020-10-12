@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'tweets',
     'relationfinder',
     'register',
+    'frontend.apps.FrontendConfig',
 ]
 
 MIDDLEWARE = [
