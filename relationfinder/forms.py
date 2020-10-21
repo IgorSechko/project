@@ -3,16 +3,42 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.db import models
 from django import forms
-from .models import FormData, UserDetails
+from .models import FormData, UserExtension
 
 
 
 class RegisterForm(UserCreationForm):
-    email = forms.EmailField()
 
     class Meta:
         model = User
-        fields = ["username", "email", "password1","password2"]
+        fields = ["username", "password1","password2"]
+
+
+class UserExtensionEditForm(forms.ModelForm):
+    class Meta:
+        model = UserExtension
+        fields = [
+            'first_name',
+            'surname',
+            'fathername',
+            'birth_date',
+            'information',
+            'photo',
+        ]
+
+class UserExtensionRegForm(forms.ModelForm):
+    class Meta:
+        model = UserExtension
+        fields = [
+            'first_name',
+            'surname',
+            'fathername',
+            'birth_date',
+        ]
+
+
+
+
 
 
 
@@ -40,20 +66,7 @@ class FormDataForm(forms.ModelForm):
             'place3_radius',
             'place3_start_year',
             'place3_end_year',
+            'information'
             ]
         exclude = ['user']
-
-
-
-class UserDetailsForm(forms.ModelForm):
-    class Meta:
-        model = UserDetails
-        fields = [
-            'user',
-            'first_name',
-            'surname',
-            'fathername',
-            'birth_date',
-            'information',
-        ]
 

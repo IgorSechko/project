@@ -1,0 +1,27 @@
+<nav class="navbar navbar-expand-sm navbar-light bg-light">
+  <div class="collapse navbar-collapse" id="navbarsExample03">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Главная<span class="sr-only">(current)</span></a>
+      </li>
+      {% if request.user.is_authenticated %}
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'profile' %}">Моя страница<span class="sr-only">(current)</span></a>
+      </li>
+      {% endif %}
+
+    </ul>
+    {% if request.user.is_authenticated %}
+    <form action="{% url 'logout' %}" method="get">
+      <button type="submit" class="myrad mx-2 btn btn-light">Выход</button>
+    </form>   
+    {% else %}
+    <form action="{% url 'login' %}" method="get">
+      <button type="submit" class="myrad mx-2 btn btn-light">Вход</button>
+    </form>   
+    <form action="{% url 'register' %}" method="get">
+      <button type="submit" class="myrad mx-2 btn btn-light">Регистрация</button>
+    </form>    
+    {% endif %}
+  </div>
+</nav>

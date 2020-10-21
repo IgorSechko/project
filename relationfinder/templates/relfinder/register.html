@@ -1,0 +1,16 @@
+<!-- {% extends 'relfinder/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block headtitle %}Регистрация{% endblock headtitle %}
+
+{% block content %} -->
+<div class="container">
+    <form method="POST" class="form-group">
+        {% csrf_token %}
+        {{form}}
+        <!-- {{form|crispy}} -->
+        <p>Уже зарегистрированы? Войдте <a href="{% url 'login' %}">здесь</a></p>
+        <button type = "submit" class="btn btn-success">register</button>
+    </form>
+</div>
+<!-- {% endblock content %} -->

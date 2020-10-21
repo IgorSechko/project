@@ -3,31 +3,21 @@ from django.contrib.auth.models import User
 # from django.contrib.auth.admin import UserAdmin
 
 # Register your models here.
-from .models import FormData, UserDetails
+from .models import FormData, UserExtension, Message, Relation
 
 
-class FormDataAdmin(admin.ModelAdmin):
-  #  list_display = ['__str__', 'user']
-  #  search_fields = ['content', 'user__username', 'user__email']
-    class Meta:
-        model = FormData
+admin.site.register(FormData)
+admin.site.register(UserExtension)
+admin.site.register(Message)
+admin.site.register(Relation)
 
 
-class UserDetailsAdmin(admin.ModelAdmin):
-  #  list_display = ['__str__', 'user']
-  #  search_fields = ['content', 'user__username', 'user__email']
-    class Meta:
-        model = UserDetails
+# class UserAdmin(admin.ModelAdmin):
+#   #  list_display = ['__str__', 'user']
+#   #  search_fields = ['content', 'user__username', 'user__email']
+#     # fields = ["username"]
+#     class Meta:
+#         model = User
 
-
-class UserAdmin(admin.ModelAdmin):
-  #  list_display = ['__str__', 'user']
-  #  search_fields = ['content', 'user__username', 'user__email']
-    # fields = ["username"]
-    class Meta:
-        model = User
-
-admin.site.register(FormData, FormDataAdmin) # now in /admin site we can see and manipulate Tweet table
-admin.site.register(UserDetails, UserDetailsAdmin)
-admin.site.unregister(User)
-admin.site.register(User,UserAdmin)
+# admin.site.unregister(User)
+# admin.site.register(User,UserAdmin)

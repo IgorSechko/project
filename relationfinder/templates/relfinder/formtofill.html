@@ -1,4 +1,7 @@
-<!doctype html>
+{% extends 'relfinder/profile_navigation.html' %}
+{% block headtitle %}Создать карточку{% endblock headtitle %}
+
+<!-- <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -10,182 +13,156 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://api-maps.yandex.ru/2.1/?apikey=447001f6-b747-4ef3-8e5d-42e3e7b9b016&lang=ru_RU" type="text/javascript"></script>
-    <style>
-        .container {
-          max-width: 560px!important;
-        }
-        
-        #popup {
-          max-width: 800px!important;
-        }
-
-        .lh-condensed { line-height: 1.25!important; }
-
-        .mymarg {
-          margin-bottom: 3cm;
-        }
-
-        .border-dark {
-            border-width:2px !important;
-        }
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+{% block static_top %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" rel="stylesheet"/>
+{% load static %}
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'css/fillform.css' %}"> -->
+{% endblock static_top %}
 
 
+{% block content1 %}
+<div class="container" >
+<div class="row">
+<div class="col-1"></div>
+<div class="col-8">
+  
+<div class="row shadow p-2 pl-4 pr-4 bg-light border rounded">
+    <form class="form" id="dataform-form" action="{% url 'savedata' %}" method="POST" novalidate>
+      {% csrf_token %}
+      <div class="row mt-3">
+        <div class="col-md-3 mb-3">
+          <label>Фамилия</label>
+        </div>
+        <div class="col-md-9 mb-3">
+          <input type="text" name="surname" class="form-control form-control-sm" placeholder="" value="" required="">
+        </div>
+        <div class="col-md-3 mb-3">
+          <label>Имя</label>
+        </div>
+        <div class="col-md-9 mb-3">
+          <input type="text" name="first_name" class="form-control form-control-sm" placeholder="" value="" required="">
+        </div>
+        <div class="col-md-3 mb-2">
+          <label>Отчество</label>
+        </div>
+        <div class="col-md-9 mb-2">
+          <input type="text" name="fathername" class="form-control form-control-sm" placeholder="" value="" required="">
+        </div>
+      </div>
 
+      <hr class="mt-2 mb-3">
 
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
+      <div class="row">
+        <div class="col-md-4 mb-2">
+          <label>Годы жизни</label>
+        </div>
+        <div class="col-md-4 mb-2">
+          <input type="text" name="birth_year" class="form-control form-control-sm datepicker" placeholder="год рождения" required>
 
-      @media (min-width: 540px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-    </style>
+        </div>
+        <div class="col-md-4 mb-2">
+          <input type="text" name="death_year" class="form-control form-control-sm datepicker" placeholder="год смерти" required>
+        </div>
+      </div>
 
-  </head>
-  <body class="bg-light">
-
-<div class="container">
-
-
-  <div class="row shadow-lg p-2 pl-4 pr-4 mt-5 border rounded-lg">
+      <hr class="mt-2 mb-3">
       
-      <form class="form" id="dataform-form" action="/savedata/" method="POST" novalidate>
-        {% csrf_token %}
-        <div class="row mt-3">
-          <div class="col-md-3 mb-3">
-            <label>Фамилия</label>
-          </div>
-          <div class="col-md-9 mb-3">
-            <input type="text" name="surname" class="form-control form-control-sm" placeholder="" value="" required>
-          </div>
-          <div class="col-md-3 mb-3">
-            <label>Имя</label>
-          </div>
-          <div class="col-md-9 mb-3">
-            <input type="text" name="first_name" class="form-control form-control-sm" placeholder="" value="" required>
-          </div>
-          <div class="col-md-3 mb-2">
-            <label>Отчество</label>
-          </div>
-          <div class="col-md-9 mb-2">
-            <input type="text" name="fathername" class="form-control form-control-sm" placeholder="" value="" required>
-          </div>
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label>Место жительства 1</label>
+        </div>
+        <div class="col-md-8 mb-3">
+          <input type="hidden" name="place1_x" value="10000.0" />
+          <input type="hidden" name="place1_y" value="10000.0" />
+          <input type="hidden" name="place1_radius" value="-1.0" />
+          <button class="btn btn-primary btn-sm btn-block" onclick="setCurPlace(1);makeCircleVisible()" data-toggle="modal" data-target="#myModal" type="button">Указать на карте</button>
         </div>
 
-        <hr class="mt-2 mb-3">
-
-        <div class="row">
-          <div class="col-md-4 mb-2">
-            <label>Годы жизни</label>
-          </div>
-          <div class="col-md-4 mb-2">
-            <input type="text" name="birth_year" class="form-control form-control-sm" placeholder="год рождения" required>
-          </div>
-          <div class="col-md-4 mb-2">
-            <input type="text" name="death_year" class="form-control form-control-sm" placeholder="год смерти" required>
-          </div>
+        <div class="col-md-4 mb-2">
+          <label>Годы жизни</label>
         </div>
+        <div class="col-md-4 mb-2">
+          <input type="text" name="place1_start_year" class="form-control form-control-sm" placeholder="С" required>
+        </div>
+        <div class="col-md-4 mb-2">
+          <input type="text" name="place1_end_year" class="form-control form-control-sm" placeholder="по" required>
+        </div>
+      </div>
+      
+      <hr class="mt-2 mb-3">
 
-        <hr class="mt-2 mb-3">
-        
-        <div class="row">
-          <div class="col-md-4 mb-3">
-            <label>Место жительства 1</label>
-          </div>
-          <div class="col-md-8 mb-3">
-            <input type="hidden" name="place1_x" value="" />
-            <input type="hidden" name="place1_y" value="" />
-            <input type="hidden" name="place1_radius" value="" />
-            <button class="btn btn-primary btn-sm btn-block" onclick="setCurPlace(1);makeCircleVisible()" data-toggle="modal" data-target="#myModal" type="button">Указать на карте</button>
-          </div>
-
-          <div class="col-md-4 mb-2">
-            <label>Годы жизни</label>
-          </div>
-          <div class="col-md-4 mb-2">
-            <input type="text" name="place1_start_year" class="form-control form-control-sm" placeholder="С" required>
-          </div>
-          <div class="col-md-4 mb-2">
-            <input type="text" name="place1_end_year" class="form-control form-control-sm" placeholder="по" required>
-          </div>
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label>Место жительства 2</label>
+        </div>
+        <div class="col-md-8 mb-3">
+          <input type="hidden" name="place2_x" value="10000.0" />
+          <input type="hidden" name="place2_y" value="10000.0" />
+          <input type="hidden" name="place2_radius" value="-1.0" />
+          <button class="btn btn-primary btn-sm btn-block" onclick="setCurPlace(2);makeCircleVisible()" data-toggle="modal" data-target="#myModal" type="button">Указать на карте</button>
         </div>
         
-        <hr class="mt-2 mb-3">
-
-        <div class="row">
-          <div class="col-md-4 mb-3">
-            <label>Место жительства 2</label>
-          </div>
-          <div class="col-md-8 mb-3">
-            <input type="hidden" name="place2_x" value="" />
-            <input type="hidden" name="place2_y" value="" />
-            <input type="hidden" name="place2_radius" value="" />
-            <button class="btn btn-primary btn-sm btn-block" onclick="setCurPlace(2);makeCircleVisible()" data-toggle="modal" data-target="#myModal" type="button">Указать на карте</button>
-          </div>
-          
-          <div class="col-md-4 mb-2">
-            <label>Годы жизни</label>
-          </div>
-          <div class="col-md-4 mb-2">
-            <input type="text" name="place2_start_year" class="form-control form-control-sm" placeholder="С" required>
-          </div>
-          <div class="col-md-4 mb-2">
-            <input type="text" name="place2_end_year" class="form-control form-control-sm" placeholder="по" required>
-          </div>
+        <div class="col-md-4 mb-2">
+          <label>Годы жизни</label>
         </div>
+        <div class="col-md-4 mb-2">
+          <input type="text" name="place2_start_year" class="form-control form-control-sm" placeholder="С" required>
+        </div>
+        <div class="col-md-4 mb-2">
+          <input type="text" name="place2_end_year" class="form-control form-control-sm" placeholder="по" required>
+        </div>
+      </div>
 
-        <hr class="mt-2 mb-3">
+      <hr class="mt-2 mb-3">
+      
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label>Место жительства 3</label>
+        </div>
+        <div class="col-md-8 mb-3">
+          <input type="hidden" name="place3_x" value="10000.0" />
+          <input type="hidden" name="place3_y" value="10000.0" />
+          <input type="hidden" name="place3_radius" value="-1.0" />
+          <button class="btn btn-primary btn-sm btn-block" onclick="setCurPlace(3);makeCircleVisible()" data-toggle="modal" data-target="#myModal" type="button">Указать на карте</button>
+        </div>
         
-        <div class="row">
-          <div class="col-md-4 mb-3">
-            <label>Место жительства 3</label>
-          </div>
-          <div class="col-md-8 mb-3">
-            <input type="hidden" name="place3_x" value="" />
-            <input type="hidden" name="place3_y" value="" />
-            <input type="hidden" name="place3_radius" value="" />
-            <button class="btn btn-primary btn-sm btn-block" onclick="setCurPlace(3);makeCircleVisible()" data-toggle="modal" data-target="#myModal" type="button">Указать на карте</button>
-          </div>
-          
-          <div class="col-md-4 mb-2">
-            <label>Годы жизни</label>
-          </div>
-          <div class="col-md-4 mb-2">
-            <input type="text" name="place3_start_year" class="form-control form-control-sm" placeholder="С" required>
-          </div>
-          <div class="col-md-4 mb-2">
-            <input type="text" name="place3_end_year" class="form-control form-control-sm" placeholder="по" required>
-          </div>
+        <div class="col-md-4 mb-2">
+          <label>Годы жизни</label>
         </div>
-
-        <hr class="mt-2 mb-3">
-
-        <div class="row mt-5 mb-2">
-          <div class="col-md-2"></div>
-          <div class="col-md-8">
-            <button class="btn btn-primary btn-block" type="submit">Отправить</button>
-          </div>
-          <div class="col-md-2"></div>
+        <div class="col-md-4 mb-2">
+          <input type="text" name="place3_start_year" class="form-control form-control-sm" placeholder="С" required>
         </div>
-               
-      </form>
-  </div>
+        <div class="col-md-4 mb-2">
+          <input type="text" name="place3_end_year" class="form-control form-control-sm" placeholder="по" required>
+        </div>
+      </div>
+
+      <hr class="mt-2 mb-3">
+      <label>Дополнительная информация</label>
+      <textarea name="information" class="form-control" rows="7"></textarea>
+      <hr class="mt-2 mb-3">
+
+      <div class="row mt-5 mb-2">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+          <button class="btn btn-primary btn-sm btn-block" type="submit">Отправить</button>
+        </div>
+        <div class="col-md-3"></div>
+      </div>    
+    </form>
+</div>
+
+</div>
+<div class="col-3"></div>
+</div>
 </div>
 
 
 <div class="modal" id="myModal">
-  <div class="container border bg-light pb-4 pl-4 pr-4 mt-4 rounded-lg" id="popup">
+  <div class="container shadow border bg-light pb-4 pl-4 pr-4 mt-4 rounded-lg" id="popup" style="max-width: 1200px;">
     <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
-    <div class="mt-4 border border-dark" id="map" style="width: 750px; height: 500px"></div>
+    <div class="mt-4 border border-dark" id="map" style="width: 1150px; height: 700px"></div>
     <div class="row">
       <div class="col-md-5"></div>
       <div class="col-md-2">
@@ -199,97 +176,20 @@
 <div class="mymarg"></div>
 
 
+{% endblock content1 %}
 
-<script type="text/javascript">
-  // Функция ymaps.ready() будет вызвана, когда
-  // загрузятся все компоненты API, а также когда будет готово DOM-дерево.
-  ymaps.ready(init);
-  var Circles = [null,null,null];
-  var curPlace = null;
-  function init(){
-      myMap = new ymaps.Map("map", {
-          center: [55.00, 37.00],
-          zoom: 4,
-          controls: ['rulerControl','zoomControl','typeSelector','fullscreenControl']
-      });
-      var button = new ymaps.control.Button({data: {content: 'Добавить / снять выделение'}, options: {maxWidth: 200}});
-      button.events.add('click',function(e){
-        var pixels = document.getElementsByClassName("ymaps-2-1-77-scaleline")[0].style.width;
-        var distance = document.getElementsByClassName("ymaps-2-1-77-scaleline__label")[0].innerHTML;
-        var factor = 1000;
-        if(!distance.includes("км")){
-          factor = 1;
-        }
-        var widthInMeters = factor*750*parseInt(distance,10)/parseInt(pixels,10);
-        var radius = widthInMeters/7;
-        if(!Circles[curPlace-1]){
-              Circles[curPlace-1] = new ymaps.Circle([
-              myMap.getCenter(),
-              radius
-          ], {}, {
-              fillColor: "#007BFF33",
-              strokeColor: "#007BFF",              
-              strokeOpacity: 0.8,            
-              strokeWidth: 4
-          });   
-          myMap.geoObjects.add(Circles[curPlace-1]);          
-          Circles[curPlace-1].editor.startEditing();
-        } else {
-          myMap.geoObjects.remove(Circles[curPlace-1]);
-          Circles[curPlace-1] = null;
-        }
-      });
-      myMap.controls.add(button);
-  }
-  function makeCircleVisible(){
-    if(Circles[curPlace-1]){
-      myMap.geoObjects.add(Circles[curPlace-1]);
-      Circles[curPlace-1].editor.startEditing();
-    }
-  }
-  function setCurPlace(arg){
-    curPlace = arg;
-  }
-  function nullCurPlace(){
-    curPlace = null;
-  }
-  function saveData(){
-    place_x = document.getElementsByName(`place${curPlace}_x`)[0];
-    place_y = document.getElementsByName(`place${curPlace}_y`)[0];
-    place_radius = document.getElementsByName(`place${curPlace}_radius`)[0];
-    if(Circles[curPlace-1]) {
-      place_x.value = Circles[curPlace-1].geometry.getCoordinates()[0].toString();
-      place_y.value = Circles[curPlace-1].geometry.getCoordinates()[1].toString();
-      place_radius.value = Circles[curPlace-1].geometry.getRadius().toString();
-      myMap.geoObjects.remove(Circles[curPlace-1]);
-    } else {
-      place_x.value = "";
-      place_y.value = "";
-      place_radius.value = "";
-    }
-    nullCurPlace();
-  }
+
+{% block static_bottom %}
+<script src="https://api-maps.yandex.ru/2.1/?apikey=447001f6-b747-4ef3-8e5d-42e3e7b9b016&lang=ru_RU" type="text/javascript"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+<script>
+  $(".datepicker").datepicker( {
+      format: "yyyy", // Notice the Extra space at the beginning
+      viewMode: "years", 
+      minViewMode: "years"
+  });
 </script>
-
-<!--<script>
-  function handleDataformSubmit(event){
-    event.preventDefault()
-    const myForm = event.target //thr form element
-    const myFormData = new FormData(myForm)
-    // for(let [name, value] of myFormData) {
-    //   alert(`${name} = ${value}`); 
-    // }
-    console.log(myFormData)
-    const url = myForm.getAttribute("action")
-    const method = myForm.getAttribute("method")
-    const xhr = new XMLHttpRequest()
-    const responseType = "json"
-    xhr.responseType = responseType
-    xhr.open(method, url)
-    xhr.send(myFormData)
-  }
-  const formcreateEl = document.getElementById("dataform-form")
-  formcreateEl.addEventListener("submit",handleDataformSubmit)
-</script>-->
-</body>
-</html>
+{% load static %}
+<script src="{% static 'js/fillform.js' %}" type="text/javascript"></script>
+{% endblock static_bottom %}

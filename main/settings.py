@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'crispy_forms',             #CRISPY 
 
     # internal
-    'tweets',
+    # 'tweets',
     'relationfinder',
     'register',
     'frontend.apps.FrontendConfig',
@@ -130,6 +130,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/images/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR,'static')
+]
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+
 CRISPY_TEMPLATE_PACK = 'bootstrap4'  # CRISPY
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"

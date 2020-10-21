@@ -1,4 +1,4 @@
-
+<!-- 
 {% extends "relfinder/base.html" %}
 
 {% block head_title %}
@@ -7,14 +7,15 @@ Login
 
 {% load crispy_forms_tags %}
 
-{% block content %}
+{% block content %} -->
 <div class="container">
     <form method="POST" class="form-group">
         {% csrf_token %}
-        {{form|crispy}}
-        <p>Don't have an account? Create one <a href="/register/">here</a></p>
+        {{form.as_p}} 
+        <!-- {{form|crispy}} -->
+        <p>Don't have an account? Create one <a href="{% url 'register' %}">here</a></p>
         <button type="submit" class="btn btn-success">Login</button>
     </form>
 </div>
-{% endblock %}
+<!-- {% endblock %} -->
 
