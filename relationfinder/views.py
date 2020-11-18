@@ -1,114 +1,57 @@
 from django.utils.http import is_safe_url
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required 
-from django.contrib.auth.forms import AuthenticationForm 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
 import random
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-#from .serializers import TweetSerializer
 from .algorithm import evaluate
-from .forms import FormDataForm, RegisterForm, UserExtensionRegForm, UserExtensionEditForm
-from .models import FormData, UserExtension, Relation
+from .forms import CardForm, RegisterForm, UserExtensionRegForm, UserExtensionEditForm
+from .models import Card, UserExtension, Relation
 from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render, redirect
 
 
-
-# # Create your views here.
-# def home_view22(request, *args, **kwargs):
-#     # return HttpResponse('<h1>Hello</h1>')
-#     # print(request.user)
-#     return render(request, "pages/home.html", context={}, status=200)
-
-# def create_form_hhh(request, *args, **kwargs):
-#     user = request.user
-#     if not request.user.is_authenticated:
-#         user = None
-#         if request.is_ajax():
-#             return JsonResponse({}, status=401)
-#         return redirect(settings.LOGIN_URL)
-#     form = TweetForm(request.POST or None)
-#     next_url = request.POST.get("next") or None
-#     if form.is_valid():
-#         obj = form.save(commit=False)
-#         obj.user = user
-#         obj.save()
-#         if request.is_ajax():
-#             return JsonResponse(obj.serialize(), status=201)
-#         if next_url != None and is_safe_url(next_url, ALLOWED_HOSTS):
-#             return redirect(next_url)
-#         form = TweetForm()
-#     if form.errors:
-#         if request.is_ajax():
-#             return JsonResponse(form.errors, status = 400)
-#     return render(request, "components/form.html", context = {"form": form})
-
-# def index(request):
-#     return render(request, "relationfinder/index.html")
-
-def home(request):
-    return redirect('login_or_register')
-
-@login_required(login_url='login')
+@login_required(login_url='login_or_register')
 def profile(request):
     return render(request, "relfinder/profile_main.html")
 
-@login_required(login_url='login')
+
+@login_required(login_url='login_or_register')
 def profilesettings(request):
     userEx = request.user.userExtension
     form = UserExtensionEditForm(instance=userEx)
     if request.method == 'POST':
-        form = UserExtensionEditForm(request.POST, request.FILES, instance=userEx)
+        form = UserExtensionEditForm(
+            request.POST, request.FILES, instance=userEx)
         if form.is_valid():
             form.save()
         else:
             return HttpResponse("Форма заполнена неверно")
-    return render(request, "relfinder/profile_settings.html", {'form':form})
+    return render(request, "relfinder/profile_settings.html", {'form': form})
 
-@login_required(login_url='login')
+
+@login_required(login_url='login_or_register')
 def similarities(request):
-    return render(request, "relfinder/profile_similarities.html")
-    
-@login_required(login_url='login')
+    all_relations = Relation.objects.all()
+    user_relations = all_relations.filter(referenced_by__user=request.user)
+
+    return render(request, "relfinder/profile_similarities.html", {'user_relations': user_relations})
+
+
+@login_required(login_url='login_or_register')
 def mycards(request):
     return render(request, "relfinder/profile_mycards.html")
 
-def register(request):
-    if request.user.is_authenticated:
-        return redirect('home')
-    else:
-        if request.method == "POST":
-            form = RegisterForm(request.POST)
-            if form.is_valid():
-                print("form is valid")
-                form.save()
-                return redirect('home')
-            else:
-                print("form is INvalid")
-                return HttpResponse("Form is invalid")
-        else:
-            form = RegisterForm()
-            return render(request, "relfinder/register.html", {"form": form})
 
-def loginUser(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username,password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('home')
-
-    form = AuthenticationForm()
-    return render(request, 'relfinder/login.html', {'form': form})
-
-
-@login_required(login_url='login')
+@login_required(login_url='login_or_register')
 def logoutUser(request):
     logout(request)
-    return redirect('home')
+    return redirect('login_or_register')
+
 
 def login_or_register(request):
     if request.user.is_authenticated:
@@ -119,7 +62,8 @@ def login_or_register(request):
             if reqType == 'login':
                 username = request.POST.get('username')
                 password = request.POST.get('password')
-                user = authenticate(request, username=username,password=password)
+                user = authenticate(
+                    request, username=username, password=password)
                 if user is not None:
                     login(request, user)
                     return redirect('profile')
@@ -148,44 +92,60 @@ def login_or_register(request):
             context = {
                 'authForm': authForm,
                 'userRegForm': userRegForm,
-                'userExRegForm':userExRegForm
-                }
+                'userExRegForm': userExRegForm
+            }
             return render(request, 'relfinder/login_or_register.html', context=context)
 
 
-@login_required(login_url='login')
+@login_required(login_url='login_or_register')
 def create(request):
-    return render(request, "relfinder/formtofill.html")
+    return render(request, "relfinder/profile_createcard.html")
 
 
-@login_required(login_url='login')
+@login_required(login_url='login_or_register')
 def save_form_data(request, *args, **kwargs):
-    form = FormDataForm(request.POST or None)
+    form = CardForm(request.POST or None)
     if form.is_valid():                 # check if fields were filled correctly
+        print(form.cleaned_data)
         obj = form.save(commit=False)   # returns object instance
         obj.user = request.user
         obj.save()
         evaluate(obj)
     else:
         return HttpResponse("Форма заполнена некорректно")
-    return redirect("/profile")   
+    print("just before redirection back to profile")
+    return redirect("profile")
 
 
-@login_required(login_url='login')
+@login_required(login_url='login_or_register')
 def get_user(request, pk):
-    user = User.objects.get(id=pk)
-    return render(request, "relfinder/test.html", {'user': user})
+    try:
+        user = User.objects.get(id=pk)
+    except ObjectDoesNotExist:
+        return HttpResponse("Пользователь не существует")
 
-@login_required(login_url='login')
+    return render(request, "relfinder/profile_viewuser.html", {'user': user})
+
+
+@login_required(login_url='login_or_register')
+def viewcard(request, pk):
+    try:
+        card = Card.objects.get(id=pk)
+    except ObjectDoesNotExist:
+        return HttpResponse("Карточка не существует")
+
+    return render(request, "relfinder/profile_viewcard.html", {'card': card})
+
+
+@login_required(login_url='login_or_register')
 def usersearch(request):
-    users = User.objects.all().exclude(id=request.user.id)    
+    users = User.objects.all().exclude(id=request.user.id)
     return render(request, "relfinder/profile_usersearch.html", {'users': users})
 
 
-@login_required(login_url='login')
+@login_required(login_url='login_or_register')
 def messages(request):
     wbmessages = request.user.wbMessages_set
     wtmessages = request.user.wtMessages_set
-    return render(request, "relfinder/profile_messages.html", {'wbmessages': wbmessages,'wtmessages': wtmessages,})
-
+    return render(request, "relfinder/profile_messages.html", {'wbmessages': wbmessages, 'wtmessages': wtmessages, })
 

@@ -61,9 +61,9 @@ function saveData() {
 		place_radius.value = Circles[curPlace - 1].geometry.getRadius().toString();
 		myMap.geoObjects.remove(Circles[curPlace - 1]);
 	} else {
-		place_x.value = "10000.0";
-		place_y.value = "10000.0";
-		place_radius.value = "-1.0";
+		place_x.value = "";
+		place_y.value = "";
+		place_radius.value = "";
 	}
 	nullCurPlace();
 }
@@ -75,18 +75,18 @@ function saveData() {
 //   function handleDataformSubmit(event){
 //     event.preventDefault()
 //     const myForm = event.target //thr form element
-//     const myFormData = new FormData(myForm)
-//     // for(let [name, value] of myFormData) {
+//     const myCard = new Card(myForm)
+//     // for(let [name, value] of myCard) {
 //     //   alert(`${name} = ${value}`); 
 //     // }
-//     console.log(myFormData)
+//     console.log(myCard)
 //     const url = myForm.getAttribute("action")
 //     const method = myForm.getAttribute("method")
 //     const xhr = new XMLHttpRequest()
 //     const responseType = "json"
 //     xhr.responseType = responseType
 //     xhr.open(method, url)
-//     xhr.send(myFormData)
+//     xhr.send(myCard)
 //   }
 //   const formcreateEl = document.getElementById("dataform-form")
 //   formcreateEl.addEventListener("submit",handleDataformSubmit)

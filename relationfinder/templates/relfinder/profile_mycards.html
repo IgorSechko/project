@@ -3,10 +3,10 @@
 {% block content1 %}
 
 <div class="container rounded shadow bg-light m-0 p-2">
-    {% for card in request.user.formdata_set.all %}
+    {% for card in request.user.card_set.all %}
     <div class="container border rounded mb-2 mt-0 mr-0 ml-0 p-1 pl-2">
-        <div class="">
-            {{card}}
+        <div>
+            <a href="{% url 'viewcard' card.id %}">{{card}}</a>
         </div>
     </div>
     {% endfor %}

@@ -1,0 +1,32 @@
+{% extends 'relfinder/profile_navigation.html' %}
+
+
+{% block content1 %}
+<div class="row ">
+    <div class="col-4">
+        <div class=" ml-1 my-1 mr-0 p-0">
+            <img src="{{ user.userExtension.photo.url }}" class="img-thumbnail border rounded shadow">
+        </div>
+    </div>
+
+
+    <div class="col-8 m-0 p-0">
+        <div class="m-0 mt-1 p-3 shadow border bg-light rounded ">
+            <b>{{ user.userExtension.first_name }} {{ user.userExtension.fathername }}
+                {{ user.userExtension.surname }}</b>
+            <hr class="my-2 mr-5 p-0">
+            {{ user.userExtension.birth_date }}
+            <hr class="mt-2 mb-3 mr-5 p-0">
+            <div class="mr-5 mb-3">
+                {% if user.userExtension.information %}
+                {{ user.userExtension.information }}
+                {% else %}
+                <p class="text-muted">Информация не задана.</p>
+                {% endif %}
+            </div>
+
+
+        </div>
+    </div>
+</div>
+{% endblock content1 %}

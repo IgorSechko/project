@@ -42,13 +42,10 @@ INSTALLED_APPS = [
 
     # third-party
     'rest_framework',
-    'crispy_forms',             #CRISPY 
 
     # internal
-    # 'tweets',
     'relationfinder',
     'register',
-    'frontend.apps.FrontendConfig',
 ]
 
 MIDDLEWARE = [

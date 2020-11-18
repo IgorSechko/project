@@ -2,22 +2,27 @@
 
 
 {% block content1 %}
-<div class="row ">
+<div class="row">
     <div class="col-4">
-      <div class=" ml-1 my-1 mr-0 p-0">
+      <div class=" ml-1 my-0 mr-0 p-0">
         <img src="{{ request.user.userExtension.photo.url }}"  class="img-thumbnail border rounded shadow">
       </div>
     </div>
-
+      
 
     <div class="col-8 m-0 p-0">
-        <div class="m-0 mt-1 p-0 shadow border bg-light rounded ">
-            {{ request.user.userExtension.first_name }} {{ request.user.userExtension.fathername }} {{ request.user.userExtension.surname }}
-            <hr class="my-1 mr-5 p-0">
+        <div class="m-0 mt-0 p-3 shadow border bg-light rounded ">
+            <b>{{ request.user.userExtension.first_name }} {{ request.user.userExtension.fathername }} {{ request.user.userExtension.surname }}</b>
+            <hr class="my-2 mr-5 p-0">
             {{ request.user.userExtension.birth_date }}
-            <hr class="mt-1 mb-3 mr-5 p-0"> 
+            <hr class="mt-2 mb-3 mr-5 p-0"> 
             <div class="mr-5 mb-3">
+            {% if request.user.userExtension.information %}
             {{ request.user.userExtension.information }}
+            {% else %}
+            <p class="text-muted">Здесь будет информация о вас.</p>
+            {% endif %}
+
             </div>
             
 

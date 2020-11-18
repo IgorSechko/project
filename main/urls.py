@@ -16,17 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-# from tweets.views import (home_view, tweet_detail_view,
-#     tweet_list_view, tweet_create_view
-# )
-from register import views as v
+
 
 urlpatterns = [
     path('admin', admin.site.urls),
     path('', include('relationfinder.urls')),
-    # path('register/', v.register, name="register" ),
-    # path('create-tweet', tweet_create_view),
-    # path('tweets/<int:tweet_id>', tweet_detail_view),
-    # path('tweets', tweet_list_view),
-    # path('', v.home_redirect),               #home_view),
 ]

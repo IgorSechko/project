@@ -2,17 +2,75 @@
 
 {% block content1 %}
 
-Я нашел
-<hr>
-{% for formdata in request.user.formdata_set.all %}
-{{formdata}}
-{% endfor %}
-<hr>
-Другие нашли меня
-<hr>
-{% for formdata in request.user.formdata_set.all %}
-{{formdata}}
-{% endfor %}
+{% if user_relations %}
+    {% for relation in user_relations %}
+    <div class="container  rounded shadow-sm bg-light p-3 mb-4">
+        <h6>
+            Предположительно, пользователь <a href="{% url 'user' relation.referencing.user.id %}">
+                {{relation.referencing.user}}</a> для вас {{relation.connection_type}}.
+        </h6>
+        <div>
+            <div class="pl-3">
+                <div class="pl-2 pb-1">
+                    Совпадение по карточкам:
+                </div>
+                <div class="pl-4">
+                    <div>
+                        <a href="{% url 'viewcard' relation.referenced_by.id %}">{{relation.referenced_by}}</a>
+                    </div>
+                    <div>
+                        <a href="{% url 'viewcard' relation.referencing.id %}">{{relation.referencing}}</a>
+                    </div>
+                </div>
 
+            </div>
+        </div>
+        <!-- Ваша карточка {{note.mycard.card_name}} (id: {{note.mycard.id}}) совпадает с карточкой
+            {{note.othercard.card_name}} (id: {{note.othercard.id}}) пользователя ... -->
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-10">
+            <div class="container  rounded shadow bg-light p-3 mb-4">
+                <h5 class="text-center">Совпадений не обнаружено</h5> 
+            </div>
+        </div>
+        <div class="col-1"></div>
+    </div>
+{% endif %}
 
 {% endblock content1 %}
+
+
+<!-- {% block content1_ %}
+
+<div class="container rounded shadow bg-light m-0 p-2">
+    {% for note in notes %}
+    <div class="container border rounded mb-2 mt-0 mr-0 ml-0 p-0">
+        Ваша карточка {{note.mycard.card_name}} (id: {{note.mycard.id}}) совпадает с карточкой
+        {{note.othercard.card_name}} (id: {{note.othercard.id}}) пользователя ...
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock content1_ %} -->
+
+<!-- Я нашел
+<hr>
+{% for note in notes %}
+<div>
+    Ваша карточка {{note.mycard.cardname}} совпадает с карточкой
+    {{note.othercard.cardname}} пользователя ...
+</div>
+{% endfor %}
+<hr>
+
+ -->
+
+<!-- Другие нашли меня
+<hr>
+{% for card in request.user.card_set.all %}
+{{card}}
+{% endfor %} -->
