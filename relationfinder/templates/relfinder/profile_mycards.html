@@ -1,16 +1,30 @@
 {% extends 'relfinder/profile_navigation.html' %}
 
+{% block headtitle %}
+Мои карточки
+{% endblock headtitle %}
+
 {% block content1 %}
 
 <div class="container rounded shadow bg-light m-0 p-2">
     {% for card in request.user.card_set.all %}
     <div class="container border rounded mb-2 mt-0 mr-0 ml-0 p-1 pl-2">
+
+        <div class="mb-1 mr-1">
+            <form class="m-0 p-0" action="{% url 'delete_card' card.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="close">&times;</button>
+            </form>
+
+        </div>
+
+
         <div>
             <a href="{% url 'viewcard' card.id %}">{{card}}</a>
         </div>
+
     </div>
     {% endfor %}
 </div>
-
 
 {% endblock content1 %}

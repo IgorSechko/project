@@ -1,13 +1,325 @@
 {% extends 'relfinder/profile_navigation.html' %}
+{% block headtitle %}
+Просмотр карточки
+{% endblock headtitle %}
+
+{% block static_top %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css"
+    rel="stylesheet" />
+{% endblock static_top %}
+
 
 {% block content1 %}
+<div class="container" id="cardToSee">
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-8">
 
-<div class="container rounded shadow bg-light m-0 p-2">
-    <div class="container border rounded mb-2 mt-0 mr-0 ml-0 p-0">
-        {{card}}
+            <div class="shadow p-1 px-3 m-0 bg-light border rounded">
+
+                <div class="row p-0 m-0 pt-2">
+                    <div class="col-md-4 text-right p-0 m-0 pb-2">
+                        Пол:
+                    </div>
+                    <div class="col-md-8 p-0 m-0 pl-3 pb-2">
+                        <p class=" pl-2 py-1 m-0 border rounded " style="background-color: rgb(240, 240, 240);">
+                            {{card.sex}}
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-right p-0 m-0">
+                        Степень родства:
+                    </div>
+                    <div class="col-md-8 p-0 m-0 pl-3">
+                        <p class=" pl-2 py-1 m-0 border rounded " style="background-color: rgb(240, 240, 240);">
+                            {{card.relation_level}}</p>
+
+                    </div>
+                </div>
+
+                <hr class="m-0 mt-3 mb-2 p-0">
+
+                <div class="row p-0 m-0">
+                    <div class="col-md-4 text-right p-0 m-0 pb-2">
+                        Фамилия:
+                    </div>
+                    <div class="col-md-8 p-0 m-0 pl-3 pb-2">
+                        <p class=" pl-2 py-1 m-0 border rounded " style="background-color: rgb(240, 240, 240);">
+                            {{card.surname|default_if_none:'не указано'}}</p>
+                    </div>
+                    <div class="col-md-4 text-right p-0 m-0 pb-2">
+                        Имя:
+                    </div>
+                    <div class="col-md-8 p-0 m-0 pl-3 pb-2">
+                        <p class=" pl-2 py-1 m-0 border rounded " style="background-color: rgb(240, 240, 240);">
+                            {{card.first_name|default_if_none:'не указано'}}</p>
+                    </div>
+                    <div class="col-md-4 text-right p-0 m-0">
+                        Отчество:
+                    </div>
+                    <div class="col-md-8 p-0 m-0 pl-3">
+                        <p class=" pl-2 py-1 m-0 border rounded " style="background-color: rgb(240, 240, 240);">
+                            {{card.fathername|default_if_none:'не указано'}}</p>
+                    </div>
+                </div>
+
+                <hr class="m-0 mt-3 mb-2 p-0">
+
+                <div class="row p-0 m-0">
+                    <div class="col-md-4 text-right p-0 m-0">
+                        <label>Годы жизни:</label>
+                    </div>
+                    <div class="col-md-8 p-0 m-0 pl-3">
+                        <p class=" pl-2 py-1 m-0 border rounded " style="background-color: rgb(240, 240, 240);">
+                            {{card.birth_year|default_if_none:'не указано'}} - {{card.death_year|default_if_none:'не указано'}}
+                        </p>
+                    </div>
+                </div>
+
+                <hr class="m-0 mt-2 mb-3 p-0">
+
+                <div class="row p-0 m-0">
+                    <div class="col-md-4 text-right p-0 m-0 pb-2">
+                        <label>Место жительства 1:</label>
+                    </div>
+                    <div class="col-md-8 p-0 m-0 pl-3 pb-2">
+                        <input type="hidden" name="place1_x" value="{{card.place1_x}}" />
+                        <input type="hidden" name="place1_y" value="{{card.place1_y}}" />
+                        <input type="hidden" name="place1_radius" value="{{card.place1_radius}}" />
+                        <button class="btn btn-primary btn-sm btn-block" onclick="setCurPlace(1);makeCircleVisible()"
+                            data-toggle="modal" data-target="#myModal" type="button">Просмотреть на карте</button>
+                    </div>
+                    <div class="col-md-4 text-right p-0 m-0">
+                        <label>Годы жизни:</label>
+                    </div>
+                    <div class="col-md-8 p-0 m-0 pl-3">
+                        <p class=" pl-2 py-1 m-0 border rounded " style="background-color: rgb(240, 240, 240);">
+                            {{card.place1_start_year|default_if_none:'не указано'}} - {{card.place1_end_year|default_if_none:'не указано'}}
+                        </p>
+                    </div>
+                </div>
+
+                <hr class="m-0 mt-1 mb-3 p-0">
+
+                <div class="row p-0 m-0">
+                    <div class="col-md-4 text-right p-0 m-0 pb-2">
+                        <label>Место жительства 2:</label>
+                    </div>
+                    <div class="col-md-8 p-0 m-0 pl-3 pb-2">
+                        <input type="hidden" name="place2_x" value="{{card.place2_x}}" />
+                        <input type="hidden" name="place2_y" value="{{card.place2_y}}" />
+                        <input type="hidden" name="place2_radius" value="{{card.place2_radius}}" />
+                        <button class="btn btn-primary btn-sm btn-block" onclick="setCurPlace(2);makeCircleVisible()"
+                            data-toggle="modal" data-target="#myModal" type="button">Просмотреть на карте</button>
+                    </div>
+                    <div class="col-md-4 text-right p-0 m-0">
+                        <label>Годы жизни:</label>
+                    </div>
+                    <div class="col-md-8 p-0 m-0 pl-3">
+                        <p class=" pl-2 py-1 m-0 border rounded " style="background-color: rgb(240, 240, 240);">
+                            {{card.place2_start_year|default_if_none:'не указано'}} - {{card.place2_end_year|default_if_none:'не указано'}}
+                        </p>
+                    </div>
+                </div>
+
+                <hr class="m-0 mt-1 mb-3 p-0">
+
+                <div class="row p-0 m-0">
+                    <div class="col-md-4 text-right p-0 m-0 pb-2">
+                        <label>Место жительства 3:</label>
+                    </div>
+                    <div class="col-md-8 p-0 m-0 pl-3 pb-2">
+                        <input type="hidden" name="place3_x" value="{{card.place3_x}}" />
+                        <input type="hidden" name="place3_y" value="{{card.place3_y}}" />
+                        <input type="hidden" name="place3_radius" value="{{card.place3_radius}}" />
+                        <button class="btn btn-primary btn-sm btn-block" onclick="setCurPlace(3);makeCircleVisible()"
+                            data-toggle="modal" data-target="#myModal" type="button">Просмотреть на карте</button>
+                    </div>
+
+                    <div class="col-md-4 text-right p-0 m-0">
+                        <label>Годы жизни:</label>
+                    </div>
+                    <div class="col-md-8 p-0 m-0 pl-3">
+                        <p class=" pl-2 py-1 m-0 border rounded " style="background-color: rgb(240, 240, 240);">
+                            {{card.place3_start_year|default_if_none:'не указано'}} - {{card.place3_end_year|default_if_none:'не указано'}}
+                        </p>
+                    </div>
+                </div>
+
+                <hr class="m-0 mt-1 mb-2 p-0">
+
+                {% if card.information %}
+                <label class="p-0 pl-2">Дополнительная информация:</label>
+                <div class="col-md-12 p-0 px-2 pb-3">
+                    {{card.information}}
+                </div>
+                {% else %}
+                <label class="pl-2 text-muted">Дополнительная информация не задана.</label>
+                {% endif %}
+
+                {% if showButtons %}
+                <hr class="m-0 mt-1 mb-2 p-0">
+                <div class="row p-0 m-0 mb-1">
+                    <div class="col-6 p-0 m-0">
+                        <form class="m-0 p-0" action="{% url 'update_card' card.id %}" method="GET">
+                            {% csrf_token %}
+                            <button class="btn btn-primary btn-sm" style="width: 120px; position: relative;
+                            transform: translate(70%,0%);" type="submit">Обновить</button>
+                        </form>
+                    </div>
+                    <div class="col-6 p-0 m-0">
+                        <form class="m-0 p-0" action="{% url 'delete_card' card.id %}" method="POST">
+                            {% csrf_token %}
+                            <button class="btn btn-danger btn-sm" style="width: 120px; position: relative;
+                            transform: translate(30%,0%);" type="submit">Удалить</button>
+                        </form>
+
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+
+        </div>
+        <div class="col-3"></div>
     </div>
-
 </div>
 
 
+<div class="modal" id="myModal" role="dialog">
+    <div class="container shadow border bg-light pb-4 pl-4 pr-4 mt-4 rounded-lg" id="popup" style="max-width: 1200px;">
+        <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
+        <div class="mt-4 border border-dark" id="map" style="width: 1150px; height: 700px"></div>
+        <div class="row">
+            <div class="col-md-5"></div>
+            <div class="col-md-2">
+                <button type="button" data-dismiss="modal" class="btn btn-primary col-md-12 btn-sm mt-3"
+                    id="myBtn">ок</button>
+            </div>
+            <div class="col-md-5"></div>
+        </div>
+    </div>
+</div>
+
+<div class="mymarg"></div>
+
+
+
+
 {% endblock content1 %}
+
+
+{% block static_bottom %}
+<script src="https://api-maps.yandex.ru/2.1/?apikey=447001f6-b747-4ef3-8e5d-42e3e7b9b016&lang=ru_RU"
+    type="text/javascript"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#myModal").on('hide.bs.modal', function () {
+            finishCheckPlace();
+        });
+    });
+
+    $(".datepicker").datepicker({
+        format: "yyyy",
+        viewMode: "years",
+        minViewMode: "years"
+    });
+
+    ymaps.ready(init);
+    var Circles = [null, null, null];
+    var curPlace = null;
+    function init() {
+        myMap = new ymaps.Map("map", {
+            center: [55.00, 37.00],
+            zoom: 4,
+            controls: ['rulerControl', 'zoomControl', 'typeSelector', 'fullscreenControl']
+        });
+
+        for (i = 0; i < 3; i++) {
+            place_x = document.getElementsByName(`place${i + 1}_x`)[0];
+            place_y = document.getElementsByName(`place${i + 1}_y`)[0];
+            place_radius = document.getElementsByName(`place${i + 1}_radius`)[0];
+
+            Circles[i] = new ymaps.Circle([
+                [place_x.value, place_y.value],
+                place_radius.value
+            ], {}, {
+                fillColor: "#007BFF33",
+                strokeColor: "#007BFF",
+                strokeOpacity: 0.8,
+                strokeWidth: 4
+            });
+        }
+    }
+    function makeCircleVisible() {
+        if (Circles[curPlace - 1]) {
+            myMap.geoObjects.add(Circles[curPlace - 1]);
+        }
+    }
+    function setCurPlace(arg) {
+        curPlace = arg;
+    }
+    function nullCurPlace() {
+        curPlace = null;
+    }
+    function finishCheckPlace() {
+        if (Circles[curPlace - 1]) {
+            myMap.geoObjects.remove(Circles[curPlace - 1]);
+        }
+        nullCurPlace();
+    }
+
+
+</script>
+{% load static %}
+<!-- <script src="{% static 'js/checkform.js' %}" type="text/javascript"></script> -->
+{% endblock static_bottom %}
+
+<!-- function finishCheckPlace() {
+    place_x = document.getElementsByName(`place${curPlace}_x`)[0];
+    place_y = document.getElementsByName(`place${curPlace}_y`)[0];
+    place_radius = document.getElementsByName(`place${curPlace}_radius`)[0];
+    if (Circles[curPlace - 1]) {
+        place_x.value = Circles[curPlace - 1].geometry.getCoordinates()[0].toString();
+        place_y.value = Circles[curPlace - 1].geometry.getCoordinates()[1].toString();
+        place_radius.value = Circles[curPlace - 1].geometry.getRadius().toString();
+        myMap.geoObjects.remove(Circles[curPlace - 1]);
+    } else {
+        place_x.value = "";
+        place_y.value = "";
+        place_radius.value = "";
+    }
+    nullCurPlace();
+} -->
+
+
+<!-- // var button = new ymaps.control.Button({ data: { content: 'Добавить / снять выделение' }, options: { maxWidth: 200 } });
+// button.events.add('click', function (e) {
+//     var pixels = document.getElementsByClassName("ymaps-2-1-77-scaleline")[0].style.width;
+//     var distance = document.getElementsByClassName("ymaps-2-1-77-scaleline__label")[0].innerHTML;
+//     var factor = 1000;
+//     if (!distance.includes("км")) {
+//         factor = 1;
+//     }
+//     var widthInMeters = factor * 750 * parseInt(distance, 10) / parseInt(pixels, 10);
+//     var radius = widthInMeters / 7;
+//     if (!Circles[curPlace - 1]) {
+//         Circles[curPlace - 1] = new ymaps.Circle([
+//             myMap.getCenter(),
+//             radius
+//         ], {}, {
+//             fillColor: "#007BFF33",
+//             strokeColor: "#007BFF",
+//             strokeOpacity: 0.8,
+//             strokeWidth: 4
+//         });
+//         myMap.geoObjects.add(Circles[curPlace - 1]);
+//         Circles[curPlace - 1].editor.startEditing();
+//     } else {
+//         myMap.geoObjects.remove(Circles[curPlace - 1]);
+//         Circles[curPlace - 1] = null;
+//     }
+// });
+// myMap.controls.add(button); -->

@@ -25,7 +25,7 @@ SECRET_KEY = 'o3v+zm$tpv8(mksi6ll+*@f)vffixzj+b(6#mebap3@213rxe6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','.cfe.sh']
+ALLOWED_HOSTS = ['127.0.0.1','relfinder.herokuapp.com']
 LOGIN_URL = "/login"
 MAX_TWEET_LENGTH = 240
 
@@ -40,16 +40,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # third-party
-    'rest_framework',
-
     # internal
     'relationfinder',
-    'register',
+
+    # third-party
+    'rest_framework',
+    'django_filters',
+
+
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -128,6 +131,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/images/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static')

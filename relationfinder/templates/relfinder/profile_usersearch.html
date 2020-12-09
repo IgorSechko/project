@@ -2,25 +2,53 @@
 
 {% block content1 %}
 
-<div class="container rounded shadow bg-light m-0 p-2">
-    {% for user in users %}
-    <div class="container border rounded mb-2 mt-0 mr-0 ml-0 p-0">
-        <div class="row">
-            <div class="col-3">
-
-                <div class="ml-1 my-1 mr-0 p-0">
-                    <img src="{{ user.userExtension.photo.url }}" class="img-thumbnail">
-                </div>
-            </div>
-            <div class="col-9">
-                <a href="{% url 'user' user.id %}">{{user}}</a>
-            </div>
+<div class="row mb-3">
+    <div class="col">
+        <div class="bg-light rounded shadow-sm px-2 py-2">
+            <form action="" method="get" autocomplete="off" class="form-inline">
+                <label for="id_surname" class="mr-sm-2">Фамилия:</label>
+                <input type="text" class="form-control form-control-sm mr-sm-3" name="first_name" value=""
+                    id="id_first_name">
+                <label for="id_first_name" class="mr-sm-2">Имя:</label>
+                <input type="text" class="form-control form-control-sm mr-sm-3" name="surname" value=""
+                    id="id_surname">
+                <label for="id_fathername" class="mr-sm-2">Отчество:</label>
+                <input type="text" class="form-control form-control-sm" name="fathername" value=""
+                    id="id_fathername">
+                <button class=" btn btn-sm btn-primary mx-auto" type="submit">Поиск</button>
+            </form>
         </div>
     </div>
-
-
-    {% endfor %}
 </div>
+
+<div class="row">
+    <div class="col-11">
+        {% for userExtension in userExtensions %}
+        <div class="container rounded shadow mb-2 mt-0 mr-0 ml-0 p-0 bg-light">
+            <div class="row">
+                <div class="col-3">
+
+                    <div class="ml-2 my-2 mr-0 p-0">
+                        <img src="{{ userExtension.photo.url }}" class="img-thumbnail">
+                    </div>
+                </div>
+                <div class="col-9 pt-2 pl-0">
+                    <a style="font-size: 12.5pt;" href="{% url 'user' userExtension.user.id %}">{{userExtension.user}}</a>
+                    <hr class="my-1 mr-5 p-0">
+                    <div class="text-muted" style="font-size: 10.5pt;">
+                        Дата рождения: {{ user.userExtension.birth_date }}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="col-1">
+    </div>
+</div>
+
+
 
 
 {% endblock content1 %}

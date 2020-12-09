@@ -1,20 +1,70 @@
 {% extends 'relfinder/profile_navigation.html' %}
 
+{% block headtitle %}
+Настройки профиля
+{% endblock headtitle %}
+
 {% block content1 %}
 
 
-<div class="container bg-light rounded border shadow p-3">
+<!-- <div class="container bg-light rounded border shadow p-3">
     <form action="" method="POST" enctype="multipart/form-data">
 
         {% csrf_token %}
-    
+
         {{form.as_p}}
-    
+
         <input type="submit" class="btn border" name="update" id=""></input>
     </form>
+</div> -->
+
+<div class="col-9 m-0 p-0">
+    <div class="m-2 p-0">
+        <div class="container bg-light rounded border shadow p-3">
+            <form action="" method="POST" autocomplete="off" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <p>
+                    <label for="id_first_name">Имя:</label>
+                    <input type="text" class="form-control form-control-sm" name="first_name"
+                        value="{{form.first_name.value}}" maxlength="30" id="id_first_name">
+                </p>
+                <p>
+                    <label for="id_surname">Фамилия:</label>
+                    <input type="text" class="form-control form-control-sm" name="surname"
+                        value="{{form.surname.value}}" maxlength="30" id="id_surname">
+                </p>
+                <p>
+                    <label for="id_fathername">Отчество:</label>
+                    <input type="text" class="form-control form-control-sm" name="fathername"
+                        value="{{form.fathername.value}}" maxlength="30" id="id_fathername">
+                </p>
+                <p>
+                    <label for="id_birth_date">Дата рождения:</label>
+                    <input type="date" class="form-control form-control-sm" name="birth_date"
+                        value="{{form.birth_date.value|date:'Y-m-d'}}" id="id_birth_date">
+                </p>
+                <p>
+                    <label for="id_information">Дополнительная информация:</label>
+                    <textarea name="information" class="form-control form-control-sm" cols="40" rows="7"
+                        id="id_information">{{form.information.value}}</textarea>
+                </p>
+
+                <p>
+                    <label for="id_photo">Текущее фото:</label>
+                    <a href="{{request.user.userExtension.photo.url}}">{{request.user.userExtension.photo}}</a><br>
+                    Изменить:
+                    <input type="file" name="photo" class="" accept="image/*" id="id_photo">
+
+                </p>
+                <div class="row">
+
+                    <input type="submit" class="btn mx-auto border btn-primary" name="update" id="" value="Применить">
+                </div>
+                
+            </form>
+        </div>
+    </div>
 </div>
-
-
-{{form.surname.class}}
 
 {% endblock content1 %}

@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.db import models
 from django import forms
-from .models import Card, UserExtension
+from .models import Card, UserExtension, Message
 
 
 class RegisterForm(UserCreationForm):
@@ -11,6 +11,10 @@ class RegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ["username", "password1", "password2"]
+
+
+class DateInput(forms.DateInput):
+    input_type = 'date'
 
 
 class UserExtensionEditForm(forms.ModelForm):
@@ -24,6 +28,9 @@ class UserExtensionEditForm(forms.ModelForm):
             'information',
             'photo',
         ]
+        widgets = {
+            'birth_date': DateInput(format='%Y-%m-%d')
+        }
 
 
 class UserExtensionRegForm(forms.ModelForm):
@@ -41,4 +48,9 @@ class CardForm(forms.ModelForm):
     class Meta:
         model = Card
         fields = '__all__'
-        exclude = ['user','card_name']
+        exclude = ['user', 'card_name']
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['written_to', 'text']

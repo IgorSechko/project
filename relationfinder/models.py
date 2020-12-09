@@ -61,11 +61,11 @@ class Card(models.Model):
 
     def save(self, *args, **kwargs):
         if self.first_name:
-            self.first_name = self.first_name.lower()
+            self.first_name = self.first_name.capitalize()
         if self.surname:
-            self.surname = self.surname.lower()
+            self.surname = self.surname.capitalize()
         if self.fathername:
-            self.fathername = self.fathername.lower()
+            self.fathername = self.fathername.capitalize()
         return super(Card, self).save(*args, **kwargs)
 
 
@@ -91,6 +91,7 @@ class Message(models.Model):
     written_by = models.ForeignKey(
         User, on_delete=models.CASCADE, blank=True, null=True, related_name="wbMessages_set")
     text = models.TextField(blank=True, null=True)
+    datetime = models.DateTimeField(auto_now_add=True, blank=True, null=False)
 
 
 class Relation(models.Model):

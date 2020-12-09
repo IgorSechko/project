@@ -1,5 +1,9 @@
 {% extends 'relfinder/profile_navigation.html' %}
 
+{% block headtitle %}
+Совпадения карточек
+{% endblock headtitle %}
+
 {% block content1 %}
 
 {% if user_relations %}
@@ -25,8 +29,6 @@
 
             </div>
         </div>
-        <!-- Ваша карточка {{note.mycard.card_name}} (id: {{note.mycard.id}}) совпадает с карточкой
-            {{note.othercard.card_name}} (id: {{note.othercard.id}}) пользователя ... -->
     </div>
     {% endfor %}
 {% else %}
@@ -44,33 +46,3 @@
 {% endblock content1 %}
 
 
-<!-- {% block content1_ %}
-
-<div class="container rounded shadow bg-light m-0 p-2">
-    {% for note in notes %}
-    <div class="container border rounded mb-2 mt-0 mr-0 ml-0 p-0">
-        Ваша карточка {{note.mycard.card_name}} (id: {{note.mycard.id}}) совпадает с карточкой
-        {{note.othercard.card_name}} (id: {{note.othercard.id}}) пользователя ...
-    </div>
-    {% endfor %}
-</div>
-
-{% endblock content1_ %} -->
-
-<!-- Я нашел
-<hr>
-{% for note in notes %}
-<div>
-    Ваша карточка {{note.mycard.cardname}} совпадает с карточкой
-    {{note.othercard.cardname}} пользователя ...
-</div>
-{% endfor %}
-<hr>
-
- -->
-
-<!-- Другие нашли меня
-<hr>
-{% for card in request.user.card_set.all %}
-{{card}}
-{% endfor %} -->

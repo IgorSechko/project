@@ -1,26 +1,13 @@
 {% extends 'relfinder/profile_navigation.html' %}
-{% block headtitle %}Создать карточку{% endblock headtitle %}
 
-<!-- <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Jekyll v4.1.1">
-    <title>Relation finder</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+{% block headtitle %}
+Заполнить карточку
+{% endblock headtitle %}
+
 {% block static_top %}
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css"
   rel="stylesheet" />
-{% load static %}
-<!-- <link rel="stylesheet" type="text/css" href="{% static 'css/fillform.css' %}"> -->
 {% endblock static_top %}
-
 
 {% block content1 %}
 <div class="container">
@@ -227,7 +214,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
 <script>
   $(".datepicker").datepicker({
-    format: "yyyy", // Notice the Extra space at the beginning
+    format: "yyyy",
     viewMode: "years",
     minViewMode: "years"
   });

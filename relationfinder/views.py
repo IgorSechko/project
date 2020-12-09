@@ -5,12 +5,14 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.db.models import Q
 import random
+from .filters import UserExtFilter
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .algorithm import evaluate
-from .forms import CardForm, RegisterForm, UserExtensionRegForm, UserExtensionEditForm
-from .models import Card, UserExtension, Relation
+from .forms import CardForm, RegisterForm, UserExtensionRegForm, UserExtensionEditForm, MessageForm
+from .models import Card, UserExtension, Relation, Message
 from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render, redirect
 
@@ -29,6 +31,7 @@ def profilesettings(request):
             request.POST, request.FILES, instance=userEx)
         if form.is_valid():
             form.save()
+            return redirect('profile')
         else:
             return HttpResponse("Форма заполнена неверно")
     return render(request, "relfinder/profile_settings.html", {'form': form})
@@ -106,7 +109,6 @@ def create(request):
 def save_form_data(request, *args, **kwargs):
     form = CardForm(request.POST or None)
     if form.is_valid():                 # check if fields were filled correctly
-        print(form.cleaned_data)
         obj = form.save(commit=False)   # returns object instance
         obj.user = request.user
         obj.save()
@@ -119,6 +121,8 @@ def save_form_data(request, *args, **kwargs):
 
 @login_required(login_url='login_or_register')
 def get_user(request, pk):
+    if request.user.id == int(pk):
+        return redirect('profile')
     try:
         user = User.objects.get(id=pk)
     except ObjectDoesNotExist:
@@ -133,19 +137,81 @@ def viewcard(request, pk):
         card = Card.objects.get(id=pk)
     except ObjectDoesNotExist:
         return HttpResponse("Карточка не существует")
+    showButtons = False
+    if card.user == request.user:
+        showButtons = True
+    return render(request, "relfinder/profile_viewcard.html", {'card': card, 'showButtons': showButtons})
 
-    return render(request, "relfinder/profile_viewcard.html", {'card': card})
+
+@login_required(login_url='login_or_register')
+def update_card(request, pk):
+    card = Card.objects.get(id=pk)
+    if card.user == request.user:
+        if request.method == 'POST':
+            form = CardForm(request.POST, instance=card)
+            if form.is_valid():
+                Q_obj = Q(referenced_by=card) | Q(referencing=card)
+                Relation.objects.filter(Q_obj).delete()
+                newCard = form.save()
+                evaluate(newCard)
+                return redirect('viewcard', newCard.id)
+            else:
+                return HttpResponse("Форма заполнена некорректно")
+        elif request.method == 'GET':
+            return render(request, "relfinder/profile_updatecard.html", {'card':card})
+        else:
+            return HttpResponse("Неизвестный метод отправки формы")
+    else:
+        return HttpResponse("Вы не можете изменять карточки других пользователей")
+
+
+@login_required(login_url='login_or_register')
+def delete_card(request, pk):
+    card = Card.objects.get(id=pk)
+    if card.user == request.user:
+        card.delete()
+    else:
+        return HttpResponse("Вы не можете удалять карточки других пользователей")
+    return redirect('mycards')
 
 
 @login_required(login_url='login_or_register')
 def usersearch(request):
-    users = User.objects.all().exclude(id=request.user.id)
-    return render(request, "relfinder/profile_usersearch.html", {'users': users})
+    userExtensions = UserExtension.objects.all().exclude(
+        id=request.user.userExtension.id)
+
+    userFilter = UserExtFilter(request.GET, userExtensions)
+    userExtensions = userFilter.qs
+
+    context = {
+        'userExtensions': userExtensions,
+        'userFilter': userFilter,
+    }
+    return render(request, "relfinder/profile_usersearch.html", context)
 
 
 @login_required(login_url='login_or_register')
 def messages(request):
-    wbmessages = request.user.wbMessages_set
-    wtmessages = request.user.wtMessages_set
-    return render(request, "relfinder/profile_messages.html", {'wbmessages': wbmessages, 'wtmessages': wtmessages, })
+    if request.method == "POST":
+        form = MessageForm(request.POST)
+        obj = form.save(commit=False)   # returns object instance
+        obj.written_by = request.user
+        obj.save()
+        return redirect(request.POST['redirect'])
+    elif request.method == "GET":
+        wbmessages = request.user.wbMessages_set
+        wt_users = wbmessages.values_list('written_to', flat=True).distinct()
+        wtmessages = request.user.wtMessages_set
+        wb_users = wtmessages.values_list('written_by', flat=True).distinct()
+        ids = set(list(wt_users) + list(wb_users))
+        users = User.objects.filter(id__in=ids)
+        return render(request, "relfinder/profile_messages.html", {'users': users})
 
+
+@login_required(login_url='login_or_register')
+def dialogue(request, pk):
+    messagesToPkUser = request.user.wbMessages_set.filter(written_to=pk)
+    messagesByPkUser = request.user.wtMessages_set.filter(written_by=pk)
+    messages = messagesToPkUser | messagesByPkUser
+    messages = messages.order_by('datetime')
+    return render(request, "relfinder/profile_dialogue.html", {'messages': messages, 'userPk': pk})

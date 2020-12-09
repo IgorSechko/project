@@ -1,11 +1,40 @@
 {% extends 'relfinder/profile_navigation.html' %}
 
+{% block headtitle %}
+{{ user.userExtension.first_name }} {{ user.userExtension.fathername }}
+{{ user.userExtension.surname }}
+{% endblock headtitle %}
 
 {% block content1 %}
 <div class="row ">
     <div class="col-4">
-        <div class=" ml-1 my-1 mr-0 p-0">
-            <img src="{{ user.userExtension.photo.url }}" class="img-thumbnail border rounded shadow">
+        <div class=" ml-1 my-1 mr-0 p-1 bg-light shadow rounded">
+            <img src="{{ user.userExtension.photo.url }}" class="mb-0 border img-thumbnail rounded    ">
+            <div class="p-1 px-2">
+                <button class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#myModal"
+                type="button">Отправить сообщение</button>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="modal" id="myModal">
+        <div class="container shadow border bg-light pb-4 pl-4 pr-4 mt-4 rounded-lg" id="popup"
+            style="max-width: 800px; position: relative; transform: translate(0%,30%);">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <form action="{% url 'messages' %}" method="POST" autocomplete="off" enctype="multipart/form-data">
+                {% csrf_token %}
+                <p>
+                    <label for="id_information">Введите сообщение:</label>
+                    <textarea name="text" class="form-control form-control-sm" cols="40"
+                        rows="15"></textarea>
+                </p>
+                <input type="hidden" name="written_to" value="{{user.id}}">
+                <input type="hidden" name="redirect" value="/user/{{ user.id }}">
+                <div class="row">
+                    <input type="submit" class="btn mx-auto border btn-primary" name="update" value="Отправить">
+                </div>
+            </form>
         </div>
     </div>
 
@@ -15,7 +44,7 @@
             <b>{{ user.userExtension.first_name }} {{ user.userExtension.fathername }}
                 {{ user.userExtension.surname }}</b>
             <hr class="my-2 mr-5 p-0">
-            {{ user.userExtension.birth_date }}
+            Дата рождения: {{ user.userExtension.birth_date }}
             <hr class="mt-2 mb-3 mr-5 p-0">
             <div class="mr-5 mb-3">
                 {% if user.userExtension.information %}
