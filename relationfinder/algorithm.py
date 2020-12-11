@@ -17,25 +17,25 @@ RELATION_MATRIX = {
         "Дед/Бабушка": "родной племянник(ца)",
         "Прадед/Прабабушка": "двоюродный внук/внучка",
         "Прапрадед/Прапрабабушка": "двоюродный правнук/правнучка",
-        },
+    },
     "Дед/Бабушка": {
         "Отец/Мать": "родной дядя/тётя",
         "Дед/Бабушка": "двоюродный брат/сестра",
         "Прадед/Прабабушка": "двоюродный племянник(ца)",
         "Прапрадед/Прапрабабушка": "троюродный внук/внучка",
-        },
+    },
     "Прадед/Прабабушка": {
         "Отец/Мать": "двоюродный дед/бабушка",
         "Дед/Бабушка": "двоюродный дядя/тётя",
         "Прадед/Прабабушка": "троюродный брат/сестра",
         "Прапрадед/Прапрабабушка": "троюродный племянник(ца)",
-        },
+    },
     "Прапрадед/Прапрабабушка": {
         "Отец/Мать": "двоюродный прадед/прабабушка",
         "Дед/Бабушка": "троюродный дед/бабушка",
         "Прадед/Прабабушка": "троюродный дядя/тётя",
         "Прапрадед/Прапрабабушка": "4-юродный брат/сестра",
-        },
+    },
 }
 
 
@@ -46,7 +46,6 @@ def evaluate(src):
 
 
 def run(source):
-    print("thread has started execution")
     time.sleep(1)
     targets = select_targets(source)
     for target in targets:
@@ -68,12 +67,11 @@ def run(source):
             relation2.connection_type = RELATION_MATRIX[target.relation_level][source.relation_level]
             relation2.save()
 
-    print("thread has ended execution")
-
 
 def select_targets(source):
     Q_obj = form_Q_object(source)
-    targets = Card.objects.exclude(user=source.user).filter(Q_obj, sex=source.sex)
+    targets = Card.objects.exclude(
+        user=source.user).filter(Q_obj, sex=source.sex)
     return targets
 
 
@@ -95,25 +93,46 @@ def form_Q_object(source):
 
 
 def comapare(source, target):
-    overlap = 0.0
+    similarity = 0.0
     if source.first_name and target.first_name:
         if source.first_name != target.first_name:
             return 0  # means False
         else:
-            overlap += 0.15
+            similarity += 0.15
     if source.surname and target.surname:
         if source.surname != target.surname:
             return 0
         else:
-            overlap += 0.25
+            similarity += 0.25
     if source.fathername and target.fathername:
         if source.fathername != target.fathername:
             return 0
         else:
-            overlap += 0.15
+            similarity += 0.15
     if places_bruteforce_comparison(source, target):
-        overlap += 0.20
-    return overlap
+        similarity += 0.25
+    dates_cmpr_result = dates_comparison(source, target)
+    if dates_cmpr_result is False:
+        return 0
+    else:
+        similarity += dates_cmpr_result
+    return similarity
+
+
+def dates_comparison(source, target):
+    num = 0.0
+    if source.birth_year and target.birth_year:
+        if abs(target.birth_year - source.birth_year) < 5:
+            num += 0.10
+        else:
+            return False
+    if source.death_year and target.death_year:
+        if abs(target.death_year - source.death_year) < 5:
+            num += 0.10
+        else:
+            return False
+
+    return num
 
 
 def places_bruteforce_comparison(source, target):
@@ -140,16 +159,3 @@ def place_comparison(source, target, i, j):
     else:
         return False
 
-    # if source.birth_year and target.birth_year:
-    #     if source.birth_year != target.birth_year:
-    #         return False
-    #     else:
-    #         overlap[3] = True
-    # if source.death_year and target.death_year:
-    #     if source.death_year != target.death_year:
-    #         return False
-    #     else:
-    #         overlap[4] = True
-
-    # for field in FIELDS:
-    #     field.value_from_object(source)

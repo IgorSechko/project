@@ -1,6 +1,6 @@
 import django_filters
+from .models import UserExtension
 
-from .models import *
 
 class UserExtFilter(django_filters.FilterSet):
     class Meta:

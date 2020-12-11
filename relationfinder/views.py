@@ -1,20 +1,16 @@
-from django.utils.http import is_safe_url
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Q
-import random
 from .filters import UserExtFilter
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
 from .algorithm import evaluate
 from .forms import CardForm, RegisterForm, UserExtensionRegForm, UserExtensionEditForm, MessageForm
-from .models import Card, UserExtension, Relation, Message
-from django.http import HttpResponse, Http404, JsonResponse
+from .models import Card, UserExtension, Relation
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.contrib import messages as msgs
 
 
 @login_required(login_url='login_or_register')
@@ -81,23 +77,31 @@ def login_or_register(request):
                     userEx = userExRegForm.save(commit=False)
                     userEx.user = user
                     userEx.save()
-                    return redirect('login_or_register')
+                    msgs.success(request, "Регистрация прошла успешно! Выполните вход.")
+                    return render(request, 'relfinder/login_or_register.html')
                 else:
                     return HttpResponse("Form is invalid")
+            elif reqType == 'ajax':
+                username = request.POST['username']
+                if User.objects.filter(username=username).count():
+                    return HttpResponse("этот логин уже занят")
+                else:
+                    return HttpResponse("")
+                
 
             else:
                 return HttpResponse("an error occurred")
 
         else:
-            authForm = AuthenticationForm()
-            userRegForm = RegisterForm()
-            userExRegForm = UserExtensionRegForm()
-            context = {
-                'authForm': authForm,
-                'userRegForm': userRegForm,
-                'userExRegForm': userExRegForm
-            }
-            return render(request, 'relfinder/login_or_register.html', context=context)
+            # authForm = AuthenticationForm()
+            # userRegForm = RegisterForm()
+            # userExRegForm = UserExtensionRegForm()
+            # context = {
+            #     'authForm': authForm,
+            #     'userRegForm': userRegForm,
+            #     'userExRegForm': userExRegForm
+            # }
+            return render(request, 'relfinder/login_or_register.html')
 
 
 @login_required(login_url='login_or_register')

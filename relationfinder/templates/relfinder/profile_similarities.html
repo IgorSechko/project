@@ -12,6 +12,9 @@
         <h6>
             Предположительно, пользователь <a href="{% url 'user' relation.referencing.user.id %}">
                 {{relation.referencing.user}}</a> для вас {{relation.connection_type}}.
+                <div>
+                    Вероятность: {% widthratio relation.similarity 1 100 %}
+                </div>
         </h6>
         <div>
             <div class="pl-3">
