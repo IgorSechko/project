@@ -95,20 +95,11 @@ def form_Q_object(source):
 def comapare(source, target):
     similarity = 0.0
     if source.first_name and target.first_name:
-        if source.first_name != target.first_name:
-            return 0  # means False
-        else:
-            similarity += 0.15
+        similarity += 0.15
     if source.surname and target.surname:
-        if source.surname != target.surname:
-            return 0
-        else:
-            similarity += 0.25
+        similarity += 0.25
     if source.fathername and target.fathername:
-        if source.fathername != target.fathername:
-            return 0
-        else:
-            similarity += 0.15
+        similarity += 0.15
     if places_bruteforce_comparison(source, target):
         similarity += 0.25
     dates_cmpr_result = dates_comparison(source, target)

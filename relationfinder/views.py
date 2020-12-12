@@ -93,14 +93,6 @@ def login_or_register(request):
                 return HttpResponse("an error occurred")
 
         else:
-            # authForm = AuthenticationForm()
-            # userRegForm = RegisterForm()
-            # userExRegForm = UserExtensionRegForm()
-            # context = {
-            #     'authForm': authForm,
-            #     'userRegForm': userRegForm,
-            #     'userExRegForm': userExRegForm
-            # }
             return render(request, 'relfinder/login_or_register.html')
 
 
@@ -112,14 +104,13 @@ def create(request):
 @login_required(login_url='login_or_register')
 def save_form_data(request, *args, **kwargs):
     form = CardForm(request.POST or None)
-    if form.is_valid():                 # check if fields were filled correctly
-        obj = form.save(commit=False)   # returns object instance
+    if form.is_valid():                 
+        obj = form.save(commit=False)   
         obj.user = request.user
         obj.save()
         evaluate(obj)
     else:
         return HttpResponse("Форма заполнена некорректно")
-    print("just before redirection back to profile")
     return redirect("profile")
 
 
