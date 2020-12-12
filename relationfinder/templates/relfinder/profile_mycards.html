@@ -6,25 +6,34 @@
 
 {% block content1 %}
 
-<div class="container rounded shadow bg-light m-0 p-2">
-    {% for card in request.user.card_set.all %}
-    <div class="container border rounded mb-2 mt-0 mr-0 ml-0 p-1 pl-2">
-
-        <div class="mb-1 mr-1">
-            <form class="m-0 p-0" action="{% url 'delete_card' card.id %}" method="POST">
-                {% csrf_token %}
-                <button type="submit" class="close">&times;</button>
-            </form>
-
-        </div>
-
-
-        <div>
-            <a href="{% url 'viewcard' card.id %}">{{card}}</a>
-        </div>
-
+{% if request.user.card_set.all %}
+<h5 class="text-center m-3">Мои карточки о родственниках</h5>
+{% for card in request.user.card_set.all %}
+<div class="container shadow-sm bg-light   mb-2 mt-0 mr-0 ml-0 py-3 pr-3 pl-4" style="border-radius: 13px;">
+    <div>
+        <form class="m-0 p-0" action="{% url 'delete_card' card.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="close m-0 p-0">&times;</button>
+        </form>
     </div>
-    {% endfor %}
+    <div>
+        <a class="m-0 p-0" href="{% url 'viewcard' card.id %}" style="font-size: 13.5pt; font-weight:500;">{{card}}</a>
+    </div>
+
 </div>
+
+{% endfor %}
+{% else %}
+<div class="row">
+    <div class="col-1"></div>
+    <div class="col-10">
+        <div class="container  rounded shadow bg-light p-3 mb-4">
+            <h5 class="text-center">У вас нет ни одной карточки о родственнике</h5>
+        </div>
+    </div>
+    <div class="col-1"></div>
+</div>
+{% endif %}
+
 
 {% endblock content1 %}
