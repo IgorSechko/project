@@ -76,15 +76,15 @@
                 </div>
 
                 <hr class="m-0 mt-2 mb-3 p-0">
-
+                {% load l10n %}
                 <div class="row p-0 m-0">
                     <div class="col-md-4 text-right p-0 m-0 pb-2">
                         <label>Место жительства 1:</label>
                     </div>
                     <div class="col-md-8 p-0 m-0 pl-3 pb-2">
-                        <input type="hidden" name="place1_x" value="{{card.place1_x}}" />
-                        <input type="hidden" name="place1_y" value="{{card.place1_y}}" />
-                        <input type="hidden" name="place1_radius" value="{{card.place1_radius}}" />
+                        <input type="hidden" name="place1_x" value="{{card.place1_x|unlocalize}}" />
+                        <input type="hidden" name="place1_y" value="{{card.place1_y|unlocalize}}" />
+                        <input type="hidden" name="place1_radius" value="{{card.place1_radius|unlocalize}}" />
                         <button class="btn btn-primary btn-sm btn-block" onclick="setCurPlace(1);makeCircleVisible()"
                             data-toggle="modal" data-target="#myModal" type="button">Просмотреть на карте</button>
                     </div>
@@ -105,9 +105,9 @@
                         <label>Место жительства 2:</label>
                     </div>
                     <div class="col-md-8 p-0 m-0 pl-3 pb-2">
-                        <input type="hidden" name="place2_x" value="{{card.place2_x}}" />
-                        <input type="hidden" name="place2_y" value="{{card.place2_y}}" />
-                        <input type="hidden" name="place2_radius" value="{{card.place2_radius}}" />
+                        <input type="hidden" name="place2_x" value="{{card.place2_x|unlocalize}}" />
+                        <input type="hidden" name="place2_y" value="{{card.place2_y|unlocalize}}" />
+                        <input type="hidden" name="place2_radius" value="{{card.place2_radius|unlocalize}}" />
                         <button class="btn btn-primary btn-sm btn-block" onclick="setCurPlace(2);makeCircleVisible()"
                             data-toggle="modal" data-target="#myModal" type="button">Просмотреть на карте</button>
                     </div>
@@ -128,9 +128,9 @@
                         <label>Место жительства 3:</label>
                     </div>
                     <div class="col-md-8 p-0 m-0 pl-3 pb-2">
-                        <input type="hidden" name="place3_x" value="{{card.place3_x}}" />
-                        <input type="hidden" name="place3_y" value="{{card.place3_y}}" />
-                        <input type="hidden" name="place3_radius" value="{{card.place3_radius}}" />
+                        <input type="hidden" name="place3_x" value="{{card.place3_x|unlocalize}}" />
+                        <input type="hidden" name="place3_y" value="{{card.place3_y|unlocalize}}" />
+                        <input type="hidden" name="place3_radius" value="{{card.place3_radius|unlocalize}}" />
                         <button class="btn btn-primary btn-sm btn-block" onclick="setCurPlace(3);makeCircleVisible()"
                             data-toggle="modal" data-target="#myModal" type="button">Просмотреть на карте</button>
                     </div>
@@ -230,6 +230,7 @@
     ymaps.ready(init);
     var Circles = [null, null, null];
     var curPlace = null;
+    // var myMap = null;
     function init() {
         myMap = new ymaps.Map("map", {
             center: [55.00, 37.00],
